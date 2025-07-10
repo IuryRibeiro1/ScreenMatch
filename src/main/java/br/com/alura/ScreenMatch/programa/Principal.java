@@ -4,8 +4,10 @@ import br.com.alura.ScreenMatch.entities.DadosTemporadas;
 import br.com.alura.ScreenMatch.entities.ScreenDados;
 import br.com.alura.ScreenMatch.entities.DadosSerie;
 import br.com.alura.ScreenMatch.entities.Serie;
+import br.com.alura.ScreenMatch.repository.SerieRepository;
 import br.com.alura.ScreenMatch.service.ConverterDados;
 import br.com.alura.ScreenMatch.service.ScreenService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -28,6 +30,12 @@ public class Principal {
 
     int opcao = 1;
 
+
+    SerieRepository serieRepository;
+
+    public Principal(SerieRepository serieRepository) {
+        this.serieRepository = serieRepository;
+    }
 
     public void exibeMenu() {
 
@@ -71,10 +79,12 @@ public class Principal {
 
     }
 
+    @Autowired
     public void buscarSerieWeb() {
         DadosSerie dados = buscaSerie();
-        dadosSeries.add(dados);
-        System.out.println(dados);
+        Serie serie = new Serie(dados);
+        serieRepository.save(serie);
+        System.out.println(serie);
     }
 
     public DadosSerie buscaSerie() {
@@ -98,15 +108,13 @@ public class Principal {
             var json = screenService.obterDados(ENDEREÇO + dadosSerie.titulo().replace(" ", "+") + "&season=" + i + APIKEY);
             DadosTemporadas dadosTemporadas = converterDados.obterDados(json, DadosTemporadas.class);
             temporadas.add(dadosTemporadas);
+
         }
         temporadas.forEach(System.out::println);
 
     }
     public void listarSeriesBuscadas(){
-        List<Serie> serie = new ArrayList<>();
-        serie = dadosSeries.stream()
-                        .map(s -> new Serie(s))
-                                .collect(Collectors.toList());
+        List<Serie> serie = serieRepository.findAll();
             serie.stream()
                     .sorted(Comparator.comparing(Serie::getGenero))
                     .forEach(System.out::println);
