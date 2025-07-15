@@ -36,8 +36,9 @@ public class Serie {
 
    private String atores;
 
-   @OneToMany(mappedBy = "serie")
-   private List<Episodio> Episodio = new ArrayList<>();
+   //Fetch.EAGER serve para trazer as entidades de maneira rápida
+   @OneToMany(mappedBy = "serie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+   private List<Episodio> episodios = new ArrayList<>();
 
    public Serie(DadosSerie dadosSerie) {
       this.titulo = dadosSerie.titulo();
@@ -114,11 +115,12 @@ public class Serie {
    }
 
    public List<Episodio> getEpisodio() {
-      return Episodio;
+      return episodios;
    }
-
+//Realizando associação da série com o Episódio
    public void setEpisodio(List<Episodio> episodio) {
-      Episodio = episodio;
+      episodio.forEach(e -> e.setSerie(this));
+      episodios = episodio;
    }
 
    @Override
@@ -130,6 +132,7 @@ public class Serie {
               ", genero=" + genero +
               ", poster='" + poster + '\'' +
               ", sinopse='" + sinopse + '\'' +
-              ", atores='" + atores + '\'';
+              ", atores='" + atores + '\'' +
+              ", episodios='" + episodios + '\'';
    }
 }

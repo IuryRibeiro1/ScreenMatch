@@ -1,9 +1,7 @@
 package br.com.alura.ScreenMatch.entities;
 
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
@@ -24,8 +22,12 @@ public class Episodio {
     @ManyToOne
     private Serie serie;
 
+    public Episodio(){
 
-    public Episodio(Integer numeroTemporada, DadosEpisodios dadosEpisodios){
+    }
+
+
+    public Episodio(Integer numeroTemporada, DadosSerie dadosEpisodios){
         this.temporada = numeroTemporada;
         this.titulo = dadosEpisodios.titulo();
         this.numeroEpisodio = dadosEpisodios.episodio();
