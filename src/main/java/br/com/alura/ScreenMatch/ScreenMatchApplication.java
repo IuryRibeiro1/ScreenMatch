@@ -12,19 +12,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.jackson.JsonComponent;
 
 @SpringBootApplication
-public class ScreenMatchApplication implements CommandLineRunner {
-	@Autowired
-	SerieRepository serieRepository;
+public class ScreenMatchApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ScreenMatchApplication.class, args);
-	}
-
-	@Override
-	public void run(String... args) throws Exception {
-		Principal principal = new Principal(serieRepository);
-		principal.exibeMenu();
-
-
 	}
 }
